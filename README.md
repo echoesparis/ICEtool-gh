@@ -62,7 +62,7 @@ The code is already set-up to work with Heroku. Follow [this tutorial](https://w
 Ground temperature is an estimation based on :
 
 <p align="center">
-<img src="https://latex.codecogs.com/svg.latex?\Large&space;\pagecolor{black}Q_R=Q_H+Q_L+Q_C+{\delta}Q_S" title="ICEtool_computed" />
+<img src="https://latex.codecogs.com/svg.latex?\Large&space;\pagecolor{white}Q_R=Q_H+Q_L+Q_C+{\delta}Q_S" title="ICEtool_computed" />
 </p>
 
 
