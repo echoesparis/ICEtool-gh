@@ -19,10 +19,13 @@ ICETool-gh provides a simplified component that allows to make informed design c
 
 ### Install
 
-With venv, pip, etc. like any other Python dev environment
+With venv, pip, etc. like any other Python dev environment, ex : 
+```shell
+    conda create --name py310 python=3.10.5
+```
 
 ```shell
-    pip install requirements.txt
+    pip install -r requirements.txt
 ```
 
 
@@ -39,6 +42,7 @@ With venv, pip, etc. like any other Python dev environment
 ### Run
 
 ```shell
+    cd 'path'
     python app.py
 ```
 
