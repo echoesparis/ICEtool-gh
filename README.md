@@ -16,34 +16,24 @@ ICETool-gh provides a simplified component that allows to make informed design c
 </p>
 
 
-
 ### Install
 
 With venv, pip, etc. like any other Python dev environment, ex : 
 ```shell
-    conda create --name py310 python=3.10.5
+conda create --name py310 python=3.10.5
+pip install -r requirements.txt
 ```
 
-```shell
-    pip install -r requirements.txt
-```
-
-
-
-### GH Libraries
-
-* LadybugTools
-* Human 
-* Wombat
-* ...
+GH Libraries : LadybugTools, Human, Wombat...
 
 
 
 ### Run
 
 ```shell
-    cd 'path'
-    python app.py
+conda activate py310
+cd 'folder path'
+python app.py
 ```
 
 
