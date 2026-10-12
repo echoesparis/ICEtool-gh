@@ -1,0 +1,35 @@
+cff-version: 1.2.0
+message: "If you use ICEtool-gh, please cite it as below, and cite the original ICEtool (see preferred-citation) if your work relies on its underlying model."
+title: "ICEtool-gh: a Rhino/Grasshopper port of ICEtool for ground temperature and urban heat island estimation"
+type: software
+authors:
+  - family-names: "Perrault"
+    given-names: "Sébastien"
+repository-code: "https://github.com/echoesparis/ICEtool-gh"
+url: "https://github.com/echoesparis/ICEtool-gh"
+license: GPL-3.0
+keywords:
+  - Rhino
+  - Grasshopper
+  - urban heat island
+  - UHI
+  - ground temperature
+  - urban planning
+  - thermal resilience
+abstract: >-
+  ICEtool-gh ports ICEtool (a QGIS plugin estimating urban surface/ground
+  temperatures for Urban Heat Island analysis, by Arthur Evrard, Egis / INSA
+  Toulouse) into Rhino/Grasshopper, running the per-point energy-balance solve
+  natively in-canvas through Rhino 8 ScriptEditor-v3 Python components.
+preferred-citation:
+  cff-version: 1.2.0
+  type: software
+  title: "ICEtool: a QGIS plugin to compute ground temperatures and quantify urban heat islands"
+  authors:
+    - family-names: "Evrard"
+      given-names: "Arthur"
+      affiliation: "Egis; INSA Toulouse"
+  repository-code: "https://github.com/Art-Ev/ICEtool"
+  url: "https://github.com/Art-Ev/ICEtool"
+  license: GPL-3.0
+  version: "2026.7.2"

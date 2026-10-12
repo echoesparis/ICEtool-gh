@@ -1,0 +1,34 @@
+*.3dmbak
+ee_ICETool-gh - Shortcut.lnk
+\[notion\].url
+.obsidian
+
+# external reference sources and previous scripts
+archive/
+
+# no need to share this with the world
+tools/
+tests/
+
+# generated example scene (14 MB) — regenerate locally with tools/build_qgis_example_3dm.py
+data/qgis-example.3dm
+
+# Claude Code
+.claude/
+CLAUDE.md
+
+# media, except what README.md actually embeds
+medias/*
+!medias/ee_surface temperature_example.gif
+!medias/221209_02.jpg
+!medias/qgis.png
+
+__pycache__/
+*.pyc
+*.rhl
+CLAUDE.md
+desktop.ini
+
+# internal notes, never published
+COM.md
+TASKS.md
