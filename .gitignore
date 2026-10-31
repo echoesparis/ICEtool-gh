@@ -30,5 +30,9 @@ CLAUDE.md
 desktop.ini
 
 # internal notes, never published
-COM.md
-TASKS.md
+
+# Local only: public wording and media, tasks, business model (SP, 2026-10-31; one block in every repo)
+/public-comms/
+/business-model/
+/TASKS.md
+/tasks/
