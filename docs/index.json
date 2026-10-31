@@ -1,0 +1,27 @@
+{
+  "generated_by": "agenticAI skills/obsidian/scripts/docs_map.py from the applies_to of each doc; do not edit",
+  "docs": {
+    "docs/icetool-qgis.md": {
+      "type": "report",
+      "description": "Source analysis of the upstream QGIS plugin Art-Ev/ICEtool at commit 46f31db: its algorithms and the Step 4 ground-temperature calculation the port transposes."
+    },
+    "docs/qgis-vs-gh.md": {
+      "type": "report",
+      "description": "QGIS plugin versus the Grasshopper port: numerical parity status, the old port's fixed divergences, the intentional differences, the architecture and the sun-tree gap-fill of the canvas."
+    }
+  },
+  "by_path": {
+    "gh/**": [
+      "docs/qgis-vs-gh.md"
+    ],
+    "icetool_gh/**": [
+      "docs/qgis-vs-gh.md"
+    ],
+    "icetool_gh/physics.py": [
+      "docs/icetool-qgis.md"
+    ],
+    "icetool_gh/solver.py": [
+      "docs/icetool-qgis.md"
+    ]
+  }
+}

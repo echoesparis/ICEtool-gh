@@ -1,6 +1,14 @@
+---
+type: report
+description: "Source analysis of the upstream QGIS plugin Art-Ev/ICEtool at commit 46f31db: its algorithms and the Step 4 ground-temperature calculation the port transposes."
+applies_to:
+  - icetool_gh/physics.py
+  - icetool_gh/solver.py
+---
+
 # ICEtool for QGIS — source analysis
 
-Notes on the upstream plugin, [Art-Ev/ICEtool](https://github.com/Art-Ev/ICEtool) at commit [`46f31db`](https://github.com/Art-Ev/ICEtool/tree/46f31db) / v2026.7.2, 2026-08-31 (vendored locally at commit time, not tracked in this repo). This is the reference implementation the Grasshopper port (`ee_icetool.gh` + [icetool_gh](../icetool_gh)) is adapting — see [How it works in README.md](../README.md#how-it-works) for the Rhino/GH side, and [qgis-vs-gh.md](qgis-vs-gh.md) for a full side-by-side comparison of the two implementations.
+Notes on the upstream plugin, [Art-Ev/ICEtool](https://github.com/Art-Ev/ICEtool) at commit [`46f31db`](https://github.com/Art-Ev/ICEtool/tree/46f31db) / v2026.7.2, 2026-08-31 (vendored locally at commit time, not tracked in this repo). This is the reference implementation the Grasshopper port (`ee_icetool.gh` + [[icetool_gh/__init__.py|icetool_gh]]) is adapting — see [[README#How it works|How it works in README.md]] for the Rhino/GH side, and [[docs/qgis-vs-gh|qgis-vs-gh.md]] for a full side-by-side comparison of the two implementations.
 
 ## What it is
 
@@ -22,7 +30,7 @@ Supporting code: [`Scripts/Utilities/misc.py`](https://github.com/Art-Ev/ICEtool
 
 ## Step 4 in detail — `Step4_ComputeTemperatureEPW.py`
 
-This is the algorithm the port's [icetool_gh](../icetool_gh) solver is a transposition of. Inputs: a ground-description polygon layer (fields `Material, alb, em, Cv, lambd, ep, kc, FixedTemp[degC]`), a buildings polygon layer, an `.epw` weather file, target `day`/`month`, a timezone enum, and two advanced params (`altitude`, `spatial accuracy`).
+This is the algorithm the port's [[icetool_gh/__init__.py|icetool_gh]] solver is a transposition of. Inputs: a ground-description polygon layer (fields `Material, alb, em, Cv, lambd, ep, kc, FixedTemp[degC]`), a buildings polygon layer, an `.epw` weather file, target `day`/`month`, a timezone enum, and two advanced params (`altitude`, `spatial accuracy`).
 
 Pipeline (`processAlgorithm`, 6 feedback steps):
 
@@ -30,11 +38,11 @@ Pipeline (`processAlgorithm`, 6 feedback steps):
 2. **Material join** — spatial join against the ground-description polygons to tag each grid point with its material + physical properties.
 3. **Exclude buildings** — `native:extractbylocation` keeps only points disjoint from the buildings layer; a field-calculator step stamps each point with local (`x,y`) and reprojected WGS84 (`Long,Lat`) coordinates.
 4. **Shadow sampling** — reads every hourly `.tif` from `Step_3/` (produced by the UMEP shadow step, named so the hour is parsed out of the filename), and samples each grid point's shadow fraction per hour via `gdal.InvGeoTransform` + array indexing (no interpolation) into a 24-value `Shadow1` tuple per point.
-5. **Problem simplification** — points are grouped (deduplicated) by a `key = Material + shadow-pattern` composite, so the expensive iterative solve below only runs once per unique (material, shadow-history) combination rather than once per grid point — a perf optimization [icetool_gh](../icetool_gh) replicates too (see [qgis-vs-gh.md](qgis-vs-gh.md)).
+5. **Problem simplification** — points are grouped (deduplicated) by a `key = Material + shadow-pattern` composite, so the expensive iterative solve below only runs once per unique (material, shadow-history) combination rather than once per grid point — a perf optimization [[icetool_gh/__init__.py|icetool_gh]] replicates too (see [[docs/qgis-vs-gh|qgis-vs-gh.md]]).
 6. **Weather** — parses the `.epw` (skips the header block until the first numeric row), computes sky temperature via the empirical Fuentes (1987) correlation, and extracts the single `day`/`month`'s 24 hourly values for air temp, global horizontal radiation, and relative humidity.
 7. **Deep-soil temperature (`Tint`)** — instead of a fixed constant, a sinusoidal annual-cycle model estimates ground temperature at 20 cm depth per hour from the year's mean temperature (`Tyear`) and amplitude (`deltaT`) at that hour, the material's thermal diffusivity `Dh = lambd/Cv * 86400`, and day-of-year `t` (the "Cableizer" approximation referenced in the main README).
 8. **Evapotranspiration (`ETO`)** — a full **Penman-Monteith** implementation (`Evapo()`), day/night branches, using solar geometry (hour angle, declination, extraterrestrial radiation), wind fixed at 1 km/h, humidity, and albedo. This feeds the energy balance as a genuine latent-heat term — see below for how this differs from the GH port.
-9. **Thermal equilibrium solve** — same physical model as [icetool_gh](../icetool_gh): `A + B·T + C·T⁴ = 0`, split as
+9. **Thermal equilibrium solve** — same physical model as [[icetool_gh/__init__.py|icetool_gh]]: `A + B·T + C·T⁴ = 0`, split as
    - `B = hc + lambd/ep + Cv·ep/3600` (constant per point)
    - `C = em · σ`
    - `A = -(0.8·Gh·Shadow·(1-alb) + 0.2·Gh·(1-alb)) - em·σ·Tsky⁴ - hc·Tair - (lambd/ep)·Tint - (Cv·ep/3600)·T0 + ETO·kc`
@@ -42,7 +50,7 @@ Pipeline (`processAlgorithm`, 6 feedback steps):
    solved hour-by-hour with `scipy.optimize.root`, chained (each hour's solution seeds the next as `T0`), for **one representative day only** (not a full year), iterated at least 2 and at most 25 times around the 24-hour loop until `|T[23h] - T0| < 0.5°C`. A per-material `FixedTemp[degC]` column can bypass the solve entirely and hard-set all 24 hours to a fixed value (used for e.g. water bodies).
 10. **Output** — merges results back onto every original grid point (not just the deduplicated set), writes `Step_4/ComputedPoints.csv` (`id,x,y,Temp_DegC,min_DegC,mean_DegC,max_DegC`), and loads it into QGIS as a styled point layer via `point_style.qml`.
 
-For how this compares to the Grasshopper port's calculation, see [qgis-vs-gh.md](qgis-vs-gh.md).
+For how this compares to the Grasshopper port's calculation, see [[docs/qgis-vs-gh|qgis-vs-gh.md]].
 
 ## Version / provenance
 
