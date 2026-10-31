@@ -36,3 +36,7 @@ desktop.ini
 /business-model/
 /TASKS.md
 /tasks/
+
+# Generated locally by agenticAI skills/obsidian/scripts/docs_map.py: never committed
+/docs/index.json
+/docs/code.json
