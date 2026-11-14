@@ -52,6 +52,18 @@ Pipeline (`processAlgorithm`, 6 feedback steps):
 
 For how this compares to the Grasshopper port's calculation, see [[qgis-vs-gh|qgis-vs-gh.md]].
 
+## Assumptions and limits of the model
+
+Of the upstream model; the differences of the port are in [[qgis-vs-gh|qgis-vs-gh.md]].
+
+- No water surfaces in the energy balance: a material with `FixedTemp[degC]` (fountains whose water is renewed continuously and never has time to heat) is the only water module.
+- One representative day, default 21 July (usually the hottest day of the summer, a conservative case for urban heat island studies); another day needs the matching weather file and shadow date. No full-year analysis upstream (computation time).
+- Surface temperature only: no felt temperature (MRT, UTCI).
+- Façades: only the shadows cast by buildings, not their materials.
+- Vegetation: evapotranspiration at ground level; trees contribute their shade only.
+- Upstream ignores wind in the heat exchange (fixed `hc` 5 W/m²K, wind 1 km/h in Penman-Monteith); the port derives both from the EPW in `gh` mode.
+- Points are independent: no conduction between neighbours; regular or irregular mesh, with interpolation of the points.
+
 ## Version / provenance
 
 - Upstream repo: [Art-Ev/ICEtool](https://github.com/Art-Ev/ICEtool.git), HEAD [`46f31dbf06f279246b476ea63876bf73bc3859b9`](https://github.com/Art-Ev/ICEtool/commit/46f31dbf06f279246b476ea63876bf73bc3859b9) ("Update README.md", 2026-08-31), matching `metadata.txt` version `2026.7.0` / `CITATION.cff` version `2026.7.2`.

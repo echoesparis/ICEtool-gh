@@ -49,6 +49,13 @@ All weather now comes from the EPW file itself (`epw_file` input on both compone
 
 The **QGIS-compat component** (`gh/icetool_qgis_compat.py` in [[../gh/icetool_solver.py|gh]]) disables all of these and matches QGIS exactly — use it for validation runs.
 
+## Skipped deliberately (not bugs)
+
+- Vectorising the scalar `scipy.optimize.root` into a batched Newton: it would break the root-finder-identical parity with upstream. It is the biggest future performance win (about 100× for full-year runs).
+- Keeping dedup results as group arrays instead of broadcasting to `(N, H)`: an API change.
+- The full mode-config-object refactor.
+- `orient`'s square-tree ambiguity: a hard error on mismatch was added instead (`gh/_glue_common.py`).
+
 ## Architecture (current)
 
 | | ICEtool (QGIS) | ICEtool-gh |

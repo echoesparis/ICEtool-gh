@@ -4,6 +4,8 @@ Rhino/Grasshopper port of [ICEtool](https://github.com/Art-Ev/ICEtool) (QGIS plu
 
 ![ee_surface temperature example](medias/ee_surface%20temperature_example.gif)
 
+**Validated against the QGIS plugin**: 0.005 °C on identical inputs; through the full Grasshopper pipeline (Toulouse example, 47 414 points) the hottest 24 h curve is within 0.009 °C. Details in [Validation](#validation-against-qgis-version).
+
 The per-point energy-balance solve runs **natively inside Grasshopper** via Rhino 8 Python 3 script components backed by the pure-Python package [icetool_gh](icetool_gh). No server, no conda environment, no Hops: scipy/numpy/pandas are auto-installed into Rhino's CPython by the components' `# r:` directives on first run (internet needed once). Ladybug Tools must be installed in Grasshopper for the weather import, the sun study and the heatmap.
 
 ### How it works
@@ -47,10 +49,17 @@ Numerical parity with QGIS Step 4 (see [docs/qgis-vs-gh.md](docs/qgis-vs-gh.md) 
 * [icetool_gh](icetool_gh) — solver package (physics, solver with built-in dedup, materials, EPW reader, vendored material DB).
 * [gh](gh) — the two file-synced script-component files (thin mode wrappers) + `_glue_common.py` (the shared component body: goo unwrap, tree orientation, EPW load, solve, output marshalling).
 * [scripts](scripts) — `solve.py`, the headless command-line entry point to the solver.
-* `ee_icetool.gh` (repo root) — the definition, alongside `data/` — a custom demo scene (`simple-example.3dm`) and the Toulouse EPW. The INSA-Toulouse QGIS-replica scene is generated locally (not shipped in the repo).
+* `ee_icetool.gh` (repo root) — the definition, alongside `data/` — a custom demo scene (`simple-example.3dm`) and the Toulouse EPW. The INSA-Toulouse QGIS-replica scene (`qgis-example.3dm`, 14 MB) is not in the repository: download it from the [v2.0 release](https://github.com/echoesparis/ICEtool-gh/releases/tag/v2.0) into `data/`.
 * `pyproject.toml` — Python version and dependency bounds of the solver package.
 * [docs/icetool-qgis.md](docs/icetool-qgis.md) — analysis of the upstream plugin's source.
 * [docs/qgis-vs-gh.md](docs/qgis-vs-gh.md) — QGIS-vs-GH comparison and parity status.
+* [docs/physics-notes.md](docs/physics-notes.md) — literature notes on the convective heat transfer coefficient.
+
+The tests (`tests/`) and the development tools (`tools/`) that back the validation figures are kept in the maintainer's working copy and are not published in this repository.
+
+### Citing
+
+Use the "Cite this repository" button of the GitHub page ([CITATION.cff](CITATION.cff)), and cite the original ICEtool below if your work relies on its model.
 
 ### License & attribution
 
